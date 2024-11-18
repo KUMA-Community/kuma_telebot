@@ -118,6 +118,8 @@ def handle_hello_world(message):
                     light = "🟢"
                 elif item.get('status') == "blue":
                     light = "🔵"
+                elif item.get('status') == "yellow":
+                    light = "🟡"
                 else:
                     light = "🔴"
                 string_acc += light + " " + item.get('name') + "\n"
