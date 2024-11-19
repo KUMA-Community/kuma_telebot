@@ -13,6 +13,7 @@ SyslogIdentifier = bot-kuma
 RestartPreventExitStatus=99
 TimeoutSec=20
 RestartSec=5
+WatchdogSec=600
 ExecStart=/usr/local/bin/python3.12 /opt/kaspersky/kuma/correlator/0b9200ae-d5a9-41ce-bf7b-c16814ed9524/scripts/tcp_bot.py
 TimeoutStartSec=infinity
 
