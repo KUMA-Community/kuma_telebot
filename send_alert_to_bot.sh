@@ -20,4 +20,4 @@ TEC=$(echo $RULE | cut -d "|" -f 6)
 TEXT_HTML=$'⚠️Алерт \nПравило: <b>'"$NAME"$'</b> \nВремя: '"$TIME"$' \nХост: '"$HOST"$' \nСообщение: <code>'"$MSG"$'</code> \nТактика: '"$TAC"$' \nТехника: '"$TEC"$''
 
 # Port 16667 holding the bot python script
-nc 127.0.0.1 16667 <<< "$TEXT_HTML"
+nc -w 5 127.0.0.1 16667 <<< "$TEXT_HTML"
