@@ -5,6 +5,7 @@ import subprocess
 import socket
 import threading
 from configparser import ConfigParser
+from telebot import types
 import logging
 import signal
 import os
@@ -36,7 +37,9 @@ kumaGetAlerts = "https://"+kumaAddr+":7223/api/v1/alerts/"
 kumaCloseAlerts = "https://"+kumaAddr+":7223/api/v1/alerts/close"
 kumaServices = "https://"+kumaAddr+":7223/api/v1/services"
 kumaBackup = "https://"+kumaAddr+":7223/api/v1/system/backup"
-backupName = r"/tmp/kuma_backup_"+datetime.now().strftime("%d-%m-%Y_%H-%M-%S")+".tar.gz"
+backup_dir = "/tmp"
+os.makedirs(backup_dir, exist_ok=True)  # Ensure /tmp exists
+backupName = os.path.join(backup_dir, f"kuma_backup_{datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.tar.gz")
 headers = {"Authorization": "Bearer " + kumaBearer}
 kumaUser = config["Settings"]["kumaUser"]
 kumaPassword = config["Settings"]["kumaPassword"]
@@ -113,19 +116,21 @@ def handle_hello_world(message):
             json_data = json.loads(response.text)
             string_acc = ""
             light = ""
+            print(json_data)
             for item in json_data:
                 if item.get('status') == "green":
                     light = "🟢"
                 elif item.get('status') == "blue":
                     light = "🔵"
                 elif item.get('status') == "yellow":
-                    light = "🟡"
+                    light = "🟡"                
                 else:
                     light = "🔴"
                 string_acc += light + " " + item.get('name') + "\n"
             bot.send_message(chat_id, string_acc)
         if message.text == "🕹️ Backup":
             response = requests.request("GET", kumaBackup, headers=headers, verify=False)
+            bot.send_message(chat_id, f"Идет формирование архива, ожидайте... ⌛")            
             with open(backupName, "wb") as f:
                 f.write(response.content)
             backup_size = os.path.getsize(backupName) >> 20
@@ -238,6 +243,10 @@ signal.signal(signal.SIGTERM, handle_exit)
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_button_click(call):
+    print(call.message.from_user.id)
+    print(call.message.from_user)
+    print(call.message)
+    print("||||||||||||||||||||||||")
     if call.message.from_user.id in allowed_users:
         if call.data.startswith("button_pressed_"):
             chat_id = call.message.chat.id
