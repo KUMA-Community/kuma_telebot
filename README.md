@@ -5,6 +5,9 @@
 - Необходим **Python 3.7+**
 - Необходима библиотека (pyTelegramBotAPI), установка: `pip3 install pyTelegramBotAPI`
 
+> [!IMPORTANT]  
+> Для KUMA от 4.0 и выше поменяйте версию API (на v3) в переменных (kumaGetAlerts, kumaCloseAlerts, kumaServices, kumaBackup) в коде.
+
 # Шаги для настройки
 1. Разместите файлы `kuma_telebot.conf`, `kuma_telebot.py`, `send_alert_to_bot.sh` по пути:
    ```console
